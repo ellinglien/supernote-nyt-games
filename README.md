@@ -2,7 +2,7 @@
 
 An unofficial little Android app that runs the New York Times games on a Supernote e-ink tablet (Manta, Nomad), tuned for a greyscale screen.
 
-It opens the NYT games pages and nothing else: no news, no other sites, no ads or trackers. You sign in with your own NYT account.
+It opens the NYT games pages and their hint pages, and nothing else: no news, no other sites, no ads or trackers. You sign in with your own NYT account.
 
 Not made by or affiliated with The New York Times. You need your own NYT Games subscription for the games that require one.
 
@@ -21,6 +21,7 @@ Not made by or affiliated with The New York Times. You need your own NYT Games s
 - **Strands:** the letters you're tapping are black, the spangram dark grey, theme words mid grey.
 - **Connections:** bigger on the Manta.
 - Text is never shrunk below 100% (Supernote's system font setting otherwise shrinks every web page).
+- **Hints:** each game's hint button (the lightbulb) opens its hint page, with a big **← Back to the game** bar at the bottom.
 - If Wi-Fi is off, you get a "No connection" page with **Try again** and **Close**. It reloads by itself when Wi-Fi comes back.
 
 ## Install (about 5 minutes, no coding)
@@ -51,6 +52,7 @@ To update, install the newer `NYT-Games.apk` the same way. Your login and puzzle
 - `src/app/helpyy/nyt/MainActivity.java`: a locked-down WebView. It only allows NYT game pages and the NYT login, blocks everything else, and shows the offline page.
 - `res/raw/eink.css`: all the greyscale and sizing tweaks, added to NYT's own stylesheets as they load. Start here to adjust a colour or size.
 - `res/raw/clues.js`: the big two-clue panel under the crossword grid.
+- `res/raw/back.js`: the "Back to the game" bar on hint pages.
 
 ## Build it yourself
 

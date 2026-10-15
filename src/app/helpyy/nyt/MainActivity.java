@@ -38,6 +38,13 @@ import java.util.regex.Pattern;
 public class MainActivity extends Activity {
     private static final String TAG = "NytLock";
     private static final String[] PAGE_PATHS = {"/crosswords", "/games", "/puzzles", "/svc/crosswords"};
+    /**
+     * The hint pages the games' lightbulb buttons open (Wordle Review, Connections Companion,
+     * Spelling Bee forum, Wordplay) are dated articles in the crosswords section, e.g.
+     * /2026/10/14/crosswords/wordle-review-1944.html. Only these: other dated pages are news,
+     * and the index pages, columns and bots stay blocked too. back.js adds a way back.
+     */
+    static final Pattern HINT_PAGE = Pattern.compile("^/\\d{4}/\\d{2}/\\d{2}/crosswords/");
     private static final String[] ASSET_HOSTS = {
         "nytimes.com", "nyt.com",
         // login bot checks
@@ -104,8 +111,8 @@ public class MainActivity extends Activity {
         CookieManager.getInstance().setAcceptCookie(true);
         CookieManager.getInstance().setAcceptThirdPartyCookies(web, true);
 
-        web.setWebViewClient(new LockedClient(new File(getCacheDir(), "patched-v4"), readRaw(R.raw.clues),
-                "\n" + readRaw(R.raw.eink)));
+        web.setWebViewClient(new LockedClient(new File(getCacheDir(), "patched-v4"),
+                readRaw(R.raw.clues) + "\n" + readRaw(R.raw.back), "\n" + readRaw(R.raw.eink)));
         web.loadUrl(getString(R.string.start_url));
 
         // Wi-Fi often drops while the Manta sleeps; reload the failed page as soon as it is back.
@@ -136,7 +143,7 @@ public class MainActivity extends Activity {
         if (!"www.nytimes.com".equals(host) && !"nytimes.com".equals(host)) return false;
         String path = u.getPath() == null ? "" : u.getPath();
         for (String p : PAGE_PATHS) if (path.startsWith(p)) return true;
-        return false;
+        return HINT_PAGE.matcher(path).find();
     }
 
     static boolean isAsset(Uri u) {
