@@ -3,3 +3,4 @@ build/
 *.idsig
 *.keystore
 .DS_Store
+REDDIT-POST.md
