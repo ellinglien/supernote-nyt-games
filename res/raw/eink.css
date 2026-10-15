@@ -25,21 +25,22 @@
 
 /* ---- Wordle ----
    Green and the "absent" grey come out as almost the same grey. Three levels instead:
-   right spot = black, wrong spot = mid grey, not in the word = white with a faded letter. */
-[class*=Tile-module_tile][data-state=correct]{background-color:#000!important;border-color:#000!important;color:#fff!important}
-[class*=Tile-module_tile][data-state=present]{background-color:#a8a8a8!important;border-color:#a8a8a8!important;color:#000!important}
-[class*=Tile-module_tile][data-state=absent]{background-color:#fff!important;border:2px solid #d0d0d0!important;color:#9a9a9a!important}
-[class*=Tile-module_tile]{font-size:2.6rem!important}
-[class*=Key-module_key]{background-color:#fff!important;border:1.5px solid #000!important;color:#000!important;height:80px!important;font-size:24px!important}
-[class*=Key-module_key][data-state=correct]{background-color:#000!important;color:#fff!important}
-[class*=Key-module_key][data-state=present]{background-color:#a8a8a8!important;border-color:#a8a8a8!important}
-[class*=Key-module_key][data-state=absent]{border-color:#e0e0e0!important;color:#c4c4c4!important}
+   right spot = black, wrong spot = mid grey, not in the word = white with a faded letter.
+   Scoped to #wordle-app-game: other games reuse these module names (Pips has a Board-module_board). */
+#wordle-app-game [class*=Tile-module_tile][data-state=correct]{background-color:#000!important;border-color:#000!important;color:#fff!important}
+#wordle-app-game [class*=Tile-module_tile][data-state=present]{background-color:#a8a8a8!important;border-color:#a8a8a8!important;color:#000!important}
+#wordle-app-game [class*=Tile-module_tile][data-state=absent]{background-color:#fff!important;border:2px solid #d0d0d0!important;color:#9a9a9a!important}
+#wordle-app-game [class*=Tile-module_tile]{font-size:2.6rem!important}
+#wordle-app-game [class*=Key-module_key]{background-color:#fff!important;border:1.5px solid #000!important;color:#000!important;height:80px!important;font-size:24px!important}
+#wordle-app-game [class*=Key-module_key][data-state=correct]{background-color:#000!important;color:#fff!important}
+#wordle-app-game [class*=Key-module_key][data-state=present]{background-color:#a8a8a8!important;border-color:#a8a8a8!important}
+#wordle-app-game [class*=Key-module_key][data-state=absent]{border-color:#e0e0e0!important;color:#c4c4c4!important}
 /* Bigger board and keys: Wordle caps itself at 500px wide and a 350px board. */
 [class*=Ad-module_adContainer]{display:none!important}
-[class*=App-module_game__]{max-width:720px!important;width:100%!important;max-height:calc(100% - var(--header-height))!important}
-[class*=Board-module_board__]{height:min(624px,100%)!important;width:auto!important;aspect-ratio:5/6}
-[class*=Keyboard-module_keyboard]{height:270px!important}
-[class*=Keyboard-module_row]{height:80px!important;margin-bottom:10px!important}
+#wordle-app-game{max-width:720px!important;width:100%!important;max-height:calc(100% - var(--header-height))!important}
+#wordle-app-game [class*=Board-module_board__]{height:min(624px,100%)!important;width:auto!important;aspect-ratio:5/6}
+#wordle-app-game [class*=Keyboard-module_keyboard]{height:270px!important}
+#wordle-app-game [class*=Keyboard-module_row]{height:80px!important;margin-bottom:10px!important}
 
 /* ---- Spelling Bee ----
    The yellow centre letter is barely darker than the grey ones: make it black. */
@@ -51,6 +52,19 @@
 /* ---- Connections ----
    Fine in grey (solved groups are named), just small on the Manta. */
 @media (min-width:900px){[class*=Game-module_board__]{zoom:1.4}}
+/* A solved group's colour is its difficulty (yellow easiest ... purple hardest), and in grey
+   green came out darker than blue. Light to dark instead, plus 1-4 dots. The section carries
+   data-level 0-3 (from the game script) and an inline background colour. */
+[data-testid=solved-category-container][data-level="0"]{background-color:#ececec!important;box-shadow:inset 0 0 0 2px #b8b8b8}
+[data-testid=solved-category-container][data-level="1"]{background-color:#c4c4c4!important}
+[data-testid=solved-category-container][data-level="2"]{background-color:#929292!important}
+[data-testid=solved-category-container][data-level="3"]{background-color:#4a4a4a!important}
+[data-testid=solved-category-container][data-level="3"] [class*=SolvedCategory-module_textSide]{color:#fff!important}
+[data-testid=solved-category-container]::after{position:absolute;top:8px;right:12px;font:16px/1 Arial,sans-serif;letter-spacing:2px;color:#000}
+[data-testid=solved-category-container][data-level="0"]::after{content:"\25CF\25CB\25CB\25CB"}
+[data-testid=solved-category-container][data-level="1"]::after{content:"\25CF\25CF\25CB\25CB"}
+[data-testid=solved-category-container][data-level="2"]::after{content:"\25CF\25CF\25CF\25CB"}
+[data-testid=solved-category-container][data-level="3"]::after{content:"\25CF\25CF\25CF\25CF";color:#fff}
 
 /* ---- Strands ----
    Theme words blue, the spangram yellow and the selection beige all land on similar light
@@ -71,3 +85,22 @@
 [class*=strandsBtn][style*=strands-yellow]{color:#fff!important}
 [class*=strandsBtn][aria-pressed=true]{background-color:#000!important;color:#fff!important}
 [class*=styles-module_wrapper]>svg path:not([stroke]){stroke:#000!important}
+
+/* ---- Pips ----
+   The coloured regions turn into near-identical greys, and the board is tiny. Each region
+   colour gets its own fill (three greys, two stripe directions, dots), the condition diamonds
+   go black, and the board grows through Pips' own --domino-half-size (set inline by its
+   script) so dragging still lines up; zoom would not. Checked on easy and hard boards. */
+/* Two non-overlapping widths: this file is appended to every NYT stylesheet, so an unconditional
+   rule in a later copy would override the media rule in an earlier one. */
+@media (max-width:899px){[class*=App-module_app__]{--domino-half-size:64px!important}}
+@media (min-width:900px){[class*=App-module_app__]{--domino-half-size:80px!important}}
+[class*=Board-module_boardContainer]{--bg-pips-board:#b4b4b4!important;--bg-pips-board-spaces:#fff!important}
+[class*=RegionCell-module_regionCellInner]{border-image:none!important;border:0!important}
+[class*=RegionCell-module_regionCellInner][class*=RegionCell-module_pink]{background:#dcdcdc!important}
+[class*=RegionCell-module_regionCellInner][class*=RegionCell-module_orange]{background:#a8a8a8!important}
+[class*=RegionCell-module_regionCellInner][class*=RegionCell-module_purple]{background:#6e6e6e!important}
+[class*=RegionCell-module_regionCellInner][class*=RegionCell-module_teal]{background:repeating-linear-gradient(45deg,#fff 0 7px,#8a8a8a 7px 11px)!important}
+[class*=RegionCell-module_regionCellInner][class*=RegionCell-module_blue]{background:repeating-linear-gradient(-45deg,#fff 0 7px,#5a5a5a 7px 11px)!important}
+[class*=RegionCell-module_regionCellInner][class*=RegionCell-module_green]{background:radial-gradient(#555 2.5px,transparent 3px) 0 0/14px 14px,#fff!important}
+[class*=RegionCell-module_regionLabel_]{background-color:#000!important}

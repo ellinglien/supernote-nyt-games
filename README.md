@@ -19,7 +19,8 @@ Not made by or affiliated with The New York Times. You need your own NYT Games s
 - **Wordle:** green and grey look almost the same on e-ink, so tiles are **black** for the right spot, **grey** for the wrong spot and **white with a faded letter** for "not in the word". The keyboard matches, and the board and keys are bigger.
 - **Spelling Bee:** the centre letter is black, so it stands out.
 - **Strands:** the letters you're tapping are black, the spangram dark grey, theme words mid grey.
-- **Connections:** bigger on the Manta.
+- **Connections:** bigger on the Manta. Solved groups go from light grey (easiest) to dark (hardest), with 1–4 dots for difficulty.
+- **Pips:** a much bigger board, and each coloured region gets its own grey, stripes or dots so you can tell them apart.
 - Text is never shrunk below 100% (Supernote's system font setting otherwise shrinks every web page).
 - **Hints:** each game's hint button (the lightbulb) opens its hint page, with a big **← Back to the game** bar at the bottom.
 - If Wi-Fi is off, you get a "No connection" page with **Try again** and **Close**. It reloads by itself when Wi-Fi comes back.
@@ -46,6 +47,7 @@ To update, install the newer `NYT-Games.apk` the same way. Your login and puzzle
 - Supernote's built-in web engine is an old Chrome (96) that can't be updated. The app patches around what NYT's site needs from newer Chrome, but an NYT redesign could break a game until the app is updated.
 - Built and tested on a **Manta**. The **Nomad** layout was tested by simulating its screen size on a Manta. Reports from Nomad owners are very welcome; please open an issue.
 - Other NYT games (Tiles, Sudoku, Letter Boxed and so on) open, but haven't been tuned for e-ink yet.
+- Crossplay is a separate NYT app with no web version, so it can't be included.
 
 ## How it works
 
