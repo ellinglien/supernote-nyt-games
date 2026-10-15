@@ -112,7 +112,8 @@ public class MainActivity extends Activity {
         CookieManager.getInstance().setAcceptThirdPartyCookies(web, true);
 
         web.setWebViewClient(new LockedClient(new File(getCacheDir(), "patched-v4"),
-                readRaw(R.raw.clues) + "\n" + readRaw(R.raw.back), "\n" + readRaw(R.raw.eink)));
+                readRaw(R.raw.clues) + "\n" + readRaw(R.raw.back) + "\n" + readRaw(R.raw.skipads),
+                "\n" + readRaw(R.raw.eink)));
         web.loadUrl(getString(R.string.start_url));
 
         // Wi-Fi often drops while the Manta sleeps; reload the failed page as soon as it is back.

@@ -4,6 +4,16 @@
    between releases; match their stable prefix with [class*=...]. Sizes are CSS px, which are
    the same physical size on the Manta and the Nomad (both 300 ppi, Android density 300). */
 
+/* ---- All pages ----
+   Blocked ads leave their slots behind as empty boxes ("Advertisement", ~320px tall each on
+   the main games page). */
+.ad-container{display:none!important}
+/* Promo banners pinned to the bottom ("Leaderboard: download the NYT Games app", gift
+   subscriptions, sales, "play in the app"), and anything linking to the app-download site. */
+[class*=Banner-module_singleIconBanner],[class*=Banner-module_sbBanner],[class*=Banner-module_strandsBanner],
+a[href*="onelink.me"],#cache-safe-games-sale-banner-a,
+.games-sale-banner-mini,.games-sale-banner-daily{display:none!important}
+
 /* ---- Crossword and Mini ----
    NYT marks the selected square yellow and the current word light blue, both of which render
    almost white on a grayscale panel. These are greys the 16-grey panel shows distinctly. */
@@ -48,6 +58,8 @@
    too: black, with the centre letter underlined. */
 .hive-cell.center .cell-fill{fill:#000!important}
 .hive-cell.center .cell-letter{fill:#fff!important}
+/* The outer letters' near-white grey (#e7e7e7) vanishes on the panel: a visible light grey. */
+.hive-cell.outer .cell-fill{fill:#d2d2d2!important}
 .sb-input-bright{color:#000!important;text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:6px}
 .sb-hive-input-content::after{background:#000!important}
 .sb-progress-value{background:#000!important;color:#fff!important}
@@ -67,14 +79,18 @@
 }
 
 /* ---- Letter Boxed ----
-   The letters are painted white inside the game's canvas, on a pink page that comes out light
-   grey: darken the page so they stand out, and give the buttons solid outlines. */
-.lb-content-box{background:#767676!important}
+   The letters are painted white inside the game's canvas (used ones turn black), on a pink
+   page that comes out light grey: a mid grey that still lets the white letters show and the
+   black text read, bolder results, and solid button outlines. */
+.lb-content-box{background:#bababa!important}
+.lb-word-list__word{font-size:22px!important;font-weight:700!important;color:#000!important}
 .lb-content-box button{background:#fff!important;border:2px solid #000!important;color:#000!important}
 
 /* ---- Connections ----
    Fine in grey (solved groups are named), just small on the Manta. */
 @media (min-width:900px){[class*=Game-module_board__]{zoom:1.4}}
+/* Unselected cards are a near-white beige: a visible light grey (selected ones stay dark). */
+[data-testid=card-label]:not([class*=Card-module_selected]){background-color:#dcdcdc!important}
 /* A solved group's colour is its difficulty (yellow easiest ... purple hardest), and in grey
    green came out darker than blue. Light to dark instead, plus 1-4 dots. The section carries
    data-level 0-3 (from the game script) and an inline background colour. */
@@ -105,7 +121,8 @@
   --text-strands-theme:#000!important;--text-strands-theme-emphasis:#000!important;
   --text-strands-theme-light:#000!important;--text-spangram:#000!important;--strands-dark-yellow:#000!important;
 }
-[class*=strandsBtn][style*=strands-yellow]{color:#fff!important}
+/* Found spangram letters carry var(--text-spangram) (black above, for text): override the circle. */
+[class*=strandsBtn][style*=spangram],[class*=strandsBtn][style*=strands-yellow]{background-color:#5e5e5e!important;color:#fff!important}
 [class*=strandsBtn][aria-pressed=true]{background-color:#000!important;color:#fff!important}
 [class*=styles-module_wrapper]>svg path:not([stroke]){stroke:#000!important}
 
