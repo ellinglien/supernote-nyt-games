@@ -43,11 +43,34 @@
 #wordle-app-game [class*=Keyboard-module_row]{height:80px!important;margin-bottom:10px!important}
 
 /* ---- Spelling Bee ----
-   The yellow centre letter is barely darker than the grey ones: make it black. */
+   The yellow centre letter is barely darker than the grey ones: make it black. The typed word
+   shows the centre letter in yellow (near invisible) and the cursor and rank bubble are yellow
+   too: black, with the centre letter underlined. */
 .hive-cell.center .cell-fill{fill:#000!important}
 .hive-cell.center .cell-letter{fill:#fff!important}
-/* Bigger on the Manta. Zooming .sb-hive alone does nothing: its % width shrinks to match. */
-@media (min-width:900px){.sb-content-box{zoom:1.35}}
+.sb-input-bright{color:#000!important;text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:6px}
+.sb-hive-input-content::after{background:#000!important}
+.sb-progress-value{background:#000!important;color:#fff!important}
+/* Tablet widths (the Manta) put a small hive beside a tall, mostly empty word list. Stack
+   them instead: found words in a short scrolling box on top, a big hive below. */
+@media (min-width:768px){
+  .sb-content-box{flex-direction:column!important;max-width:none!important;min-height:calc(100vh - 56px)!important}
+  .sb-status-box,.sb-wordlist-box,.sb-progress-box{width:auto!important;margin:0 24px!important}
+  .sb-wordlist-box{max-height:26vh!important;min-height:0!important;overflow:auto!important}
+  .sb-wordlist-drawer,.sb-wordlist-window{max-height:24vh!important}
+  .sb-wordlist-items-pag li,.sb-wordlist-summary,.sb-anagram{font-size:22px!important}
+  .sb-controls-box,.sb-controls{width:100%!important;max-width:none!important}
+  .sb-controls-box{flex:1 1 auto!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+  .sb-hive{width:44%!important;max-width:430px!important;margin:1vh auto 3vh!important}
+  .sb-hive-input{font-size:48px!important}
+  .hive-action{font-size:22px!important;padding:18px 34px!important;height:auto!important}
+}
+
+/* ---- Letter Boxed ----
+   The letters are painted white inside the game's canvas, on a pink page that comes out light
+   grey: darken the page so they stand out, and give the buttons solid outlines. */
+.lb-content-box{background:#767676!important}
+.lb-content-box button{background:#fff!important;border:2px solid #000!important;color:#000!important}
 
 /* ---- Connections ----
    Fine in grey (solved groups are named), just small on the Manta. */
