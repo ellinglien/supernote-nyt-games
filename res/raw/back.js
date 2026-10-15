@@ -14,10 +14,10 @@
   bar.id = 'eink-back';
   bar.href = '/crosswords';
   bar.textContent = hint ? '←  Back to the game'
-    : 'Tiles needs colour and isn\u2019t recommended on e-ink.   ←  Back';
+    : 'Tiles in greyscale? Brave.   ←  Back';
   bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:2147483647;display:block;'
     + 'padding:22px 0;background:#fff;border-top:3px solid #000;color:#000;text-align:center;'
-    + 'font:700 ' + (hint ? 26 : 22) + 'px/1 nyt-franklin,Arial,sans-serif;text-decoration:none';
+    + 'font:700 26px/1 nyt-franklin,Arial,sans-serif;text-decoration:none';
   bar.addEventListener('click', function (e) {
     // The game is the page we came from; with no history, the link's /crosswords is the way out.
     if (history.length > 1) { e.preventDefault(); history.back(); }
