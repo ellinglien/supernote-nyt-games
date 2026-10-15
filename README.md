@@ -51,6 +51,7 @@ To update, install the newer `NYT-Games.apk` the same way. Your login and puzzle
 - Supernote's built-in web engine is an old Chrome (96) that can't be updated. The app patches around what NYT's site needs from newer Chrome, but an NYT redesign could break a game until the app is updated.
 - Built and tested on a **Manta**. The **Nomad** layout was tested by simulating its screen size on a Manta. Reports from Nomad owners are very welcome; please open an issue.
 - **Tiles** opens with a note that it isn't recommended: its patterns depend on colour, and there's no black-and-white version.
+- **Bonus puzzles** (Wordle in 1, Connections 3x3 and the like) change every week, so some may not suit e-ink or may look off until the app catches up.
 - Crossplay is a separate NYT app with no web version, so it can't be included.
 
 ## How it works
