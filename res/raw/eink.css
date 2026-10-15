@@ -104,3 +104,34 @@
 [class*=RegionCell-module_regionCellInner][class*=RegionCell-module_blue]{background:repeating-linear-gradient(-45deg,#fff 0 7px,#5a5a5a 7px 11px)!important}
 [class*=RegionCell-module_regionCellInner][class*=RegionCell-module_green]{background:radial-gradient(#555 2.5px,transparent 3px) 0 0/14px 14px,#fff!important}
 [class*=RegionCell-module_regionLabel_]{background-color:#000!important}
+/* NYT's region colours are see-through, so placed dominoes (in the layer below) showed
+   through; these fills are solid. Lift the dominoes above the fills, and keep the condition
+   diamonds above both by un-stacking the region layer. */
+[class*=Board-module_regionWrapper]{z-index:auto!important}
+[class*=Board-module_droppableWrapper]{z-index:5!important}
+/* Tray dominoes are sized by Pips' script from its own half size; match the board instead. */
+[class*=Tray-module_tray__]{--tray-width:calc(var(--domino-half-size)*11)!important;max-width:96vw!important}
+[class*=Tray-module_trayDominoWrapper]{width:calc(var(--domino-half-size)*2.6)!important;height:calc(var(--domino-half-size)*1.3)!important}
+/* The game area is a full screen tall but starts under the 56px header, and the tray box has a
+   fixed 165px height the bigger dominoes overflow: together they pushed the tray's bottom row
+   off-screen. */
+[class*=GameMoment-module_gameContainer]{height:calc(100vh - 56px)!important;max-height:calc(100vh - 56px)!important}
+[class*=Tray-module_trayContainer],[class*=Tray-module_tray__]{height:auto!important;max-height:none!important;flex-shrink:0!important}
+/* Dragging is slow on e-ink; at least don't add shadows and slide animations to every frame. */
+[class*=Domino-module_]{transition:none!important;animation:none!important;box-shadow:none!important}
+
+/* ---- Sudoku ----
+   The row/column/box highlight is a pale yellow that comes out almost white, and the selected
+   square an orange mid grey. Distinct greys instead, with the selected square black. */
+:root,[data-mode]{
+  --bg-tile-sudoku-unfilled:#fff!important;
+  --bg-tile-sudoku-filled:#e8e8e8!important;
+  --bg-tile-sudoku-highlighted-indirectly:#c8c8c8!important;
+  --bg-tile-sudoku-prefilled-highlighted-indirectly:#b0b0b0!important;
+  --bg-tile-sudoku-highlighted-instance:#9a9a9a!important;
+  --bg-tile-sudoku-prefilled-highlighted-instance:#8a8a8a!important;
+  --bg-tile-sudoku-directly-highlighted:#000!important;
+  --bg-tile-sudoku-prefilled-directly-highlighted:#000!important;
+  --sudoku-orange:#000!important;
+}
+.su-cell.selected,.su-cell.selected *{color:#fff!important;fill:#fff!important}
