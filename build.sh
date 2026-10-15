@@ -1,5 +1,5 @@
 #!/bin/bash
-# Builds Crossword.apk with the bare SDK tools (no Gradle).
+# Builds NYT-Games.apk with the bare SDK tools (no Gradle).
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -28,5 +28,5 @@ rm -rf build && mkdir -p build/gen build/classes
 [ -f "$KEY" ] || "$JBR/keytool" -genkeypair -keystore "$KEY" -storepass "$PASS" -keypass "$PASS" \
   -alias "$ALIAS" -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Supernote NYT" >/dev/null 2>&1
 "$BT/zipalign" -f 4 build/unsigned.apk build/aligned.apk
-"$BT/apksigner" sign --ks "$KEY" --ks-pass "pass:$PASS" --out Crossword.apk build/aligned.apk
-echo "built $(pwd)/Crossword.apk"
+"$BT/apksigner" sign --ks "$KEY" --ks-pass "pass:$PASS" --out NYT-Games.apk build/aligned.apk
+echo "built $(pwd)/NYT-Games.apk"

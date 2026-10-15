@@ -1,6 +1,6 @@
 # NYT Games for Supernote
 
-A small Android app that runs the New York Times games on a Supernote e-ink tablet (Manta, Nomad), tuned for a greyscale screen.
+An unofficial little Android app that runs the New York Times games on a Supernote e-ink tablet (Manta, Nomad), tuned for a greyscale screen.
 
 It opens the NYT games pages and nothing else: no news, no other sites, no ads or trackers. You sign in with your own NYT account.
 
@@ -18,12 +18,12 @@ Not made by or affiliated with The New York Times. You need your own NYT Games s
 
 ## Install (about 5 minutes, no coding)
 
-1. **Download** `Crossword.apk` from the [Releases page](../../releases/latest).
+1. **Download** `NYT-Games.apk` from the [Releases page](../../releases/latest).
 2. **On the Supernote:** Settings → Security & Privacy → turn on **Sideloading**.
-3. **On your computer** (Mac, Windows or Linux): install [Android Sideloader](https://github.com/ryan-andrew/android_sideloader/releases). Plug the Supernote in with its USB cable, open Android Sideloader, click **Choose APK file**, pick `Crossword.apk`, then **Install APK**.
-4. **On the Supernote:** open **Crossword** from your apps and sign in to your NYT account (menu ☰ → Log in). You stay signed in after that.
+3. **On your computer** (Mac, Windows or Linux): install [Android Sideloader](https://github.com/ryan-andrew/android_sideloader/releases). Plug the Supernote in with its USB cable, open Android Sideloader, click **Choose APK file**, pick `NYT-Games.apk`, then **Install APK**.
+4. **On the Supernote:** open **NYT Games** from your apps and sign in to your NYT account (menu ☰ → Log in). You stay signed in after that.
 
-To update, install the newer `Crossword.apk` the same way. Your login and puzzles are kept.
+To update, install the newer `NYT-Games.apk` the same way. Your login and puzzles are kept. (Version 1.1 was called Crossword; 1.2 installs over it.)
 
 ## Tips
 
