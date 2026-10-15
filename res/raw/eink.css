@@ -1,0 +1,73 @@
+
+/* e-ink overrides (Crossword app). Appended to every NYT games stylesheet, so each game's
+   rules must only match that game. NYT's hashed module classes (Tile-module_tile__XyZ) change
+   between releases; match their stable prefix with [class*=...]. Sizes are CSS px, which are
+   the same physical size on the Manta and the Nomad (both 300 ppi, Android density 300). */
+
+/* ---- Crossword and Mini ----
+   NYT marks the selected square yellow and the current word light blue, both of which render
+   almost white on a grayscale panel. These are greys the 16-grey panel shows distinctly. */
+.xwd__cell--highlighted,.xwd__cell--highlighted.xwd__cell--shaded,
+.xwd__cell--related.xwd__cell--highlighted{fill:#c8c8c8!important}
+.xwd__cell--highlighted .xwd__cell--guess{text-shadow:none!important}
+.xwd__cell--selected,.xwd__cell--selected.xwd__cell--shaded,
+.xwd__cell--related.xwd__cell--highlighted.xwd__cell--selected{fill:#8c8c8c!important}
+.xwd__cell--selected .xwd__cell--guess{text-shadow:none!important}
+.xwd__cell--related,.xwd__cell--related.xwd__cell--shaded{fill:#e4e4e4!important}
+.xwd__cell--related .xwd__cell--guess{text-shadow:none!important}
+.xwd__clue--selected{background-color:#bdbdbd!important}
+.xwd__clue--highlighted{background-color:#e6e6e6!important;border-left-color:#000!important}
+/* Focus layout: the full clue lists go, the grid takes their space (clues.js sizes it) and
+   the two current clues show under it. */
+.xwd__clue-list--wrapper-mobile{display:none!important}
+.xwd__mobile_layout--board_container{margin:0 auto!important;max-width:none!important}
+.xwd__clue-bar-mobile--bar .xwd__clue-format{font-size:22px!important;line-height:26px!important}
+
+/* ---- Wordle ----
+   Green and the "absent" grey come out as almost the same grey. Three levels instead:
+   right spot = black, wrong spot = mid grey, not in the word = white with a faded letter. */
+[class*=Tile-module_tile][data-state=correct]{background-color:#000!important;border-color:#000!important;color:#fff!important}
+[class*=Tile-module_tile][data-state=present]{background-color:#a8a8a8!important;border-color:#a8a8a8!important;color:#000!important}
+[class*=Tile-module_tile][data-state=absent]{background-color:#fff!important;border:2px solid #d0d0d0!important;color:#9a9a9a!important}
+[class*=Tile-module_tile]{font-size:2.6rem!important}
+[class*=Key-module_key]{background-color:#fff!important;border:1.5px solid #000!important;color:#000!important;height:80px!important;font-size:24px!important}
+[class*=Key-module_key][data-state=correct]{background-color:#000!important;color:#fff!important}
+[class*=Key-module_key][data-state=present]{background-color:#a8a8a8!important;border-color:#a8a8a8!important}
+[class*=Key-module_key][data-state=absent]{border-color:#e0e0e0!important;color:#c4c4c4!important}
+/* Bigger board and keys: Wordle caps itself at 500px wide and a 350px board. */
+[class*=Ad-module_adContainer]{display:none!important}
+[class*=App-module_game__]{max-width:720px!important;width:100%!important;max-height:calc(100% - var(--header-height))!important}
+[class*=Board-module_board__]{height:min(624px,100%)!important;width:auto!important;aspect-ratio:5/6}
+[class*=Keyboard-module_keyboard]{height:270px!important}
+[class*=Keyboard-module_row]{height:80px!important;margin-bottom:10px!important}
+
+/* ---- Spelling Bee ----
+   The yellow centre letter is barely darker than the grey ones: make it black. */
+.hive-cell.center .cell-fill{fill:#000!important}
+.hive-cell.center .cell-letter{fill:#fff!important}
+/* Bigger on the Manta. Zooming .sb-hive alone does nothing: its % width shrinks to match. */
+@media (min-width:900px){.sb-content-box{zoom:1.35}}
+
+/* ---- Connections ----
+   Fine in grey (solved groups are named), just small on the Manta. */
+@media (min-width:900px){[class*=Game-module_board__]{zoom:1.4}}
+
+/* ---- Strands ----
+   Theme words blue, the spangram yellow and the selection beige all land on similar light
+   greys, and the selection's beige (shared with hints) was nearly invisible. Four levels:
+   selecting = black, spangram = dark grey, theme words = mid grey, hints = light grey.
+   Found letters carry inline style="background-color: var(--strands-blue|yellow)"; the
+   selection carries var(--bg-strands-hint) with aria-pressed=true. Checked 2026-10-15 with a
+   found theme word, a tapped letter and a mocked spangram. Bigger letters were tried and
+   dropped: Strands draws its lines from measured positions and they stopped lining up. */
+:root,[data-mode]{
+  --strands-yellow:#6e6e6e!important;--bg-spangram:#6e6e6e!important;
+  --strands-blue:#b0b0b0!important;--bg-strands-theme:#b0b0b0!important;
+  --strands-beige:#dcdcdc!important;--bg-strands-hint:#dcdcdc!important;
+  --strands-dark-mint:#000!important;--strands-darker-mint:#000!important;
+  --text-strands-theme:#000!important;--text-strands-theme-emphasis:#000!important;
+  --text-strands-theme-light:#000!important;--text-spangram:#000!important;--strands-dark-yellow:#000!important;
+}
+[class*=strandsBtn][style*=strands-yellow]{color:#fff!important}
+[class*=strandsBtn][aria-pressed=true]{background-color:#000!important;color:#fff!important}
+[class*=styles-module_wrapper]>svg path:not([stroke]){stroke:#000!important}
