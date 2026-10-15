@@ -6,6 +6,13 @@ It opens the NYT games pages and nothing else: no news, no other sites, no ads o
 
 Not made by or affiliated with The New York Times. You need your own NYT Games subscription for the games that require one.
 
+<p align="center">
+  <img src="docs/crossword.png" width="45%" alt="The crossword on a Supernote Manta: a large grid filling the width, the current Across and Down clues in big type below it, and the keyboard at the bottom.">
+  &nbsp;
+  <img src="docs/wordle.png" width="45%" alt="Wordle on a Supernote Manta: right-spot tiles are black with white letters, wrong-spot tiles grey, and letters not in the word faded on white. The keyboard keys match.">
+</p>
+<p align="center"><sub>Screenshots from a Supernote Manta. Crossword: big grid and the two current clues. Wordle (example guesses): black = right spot, grey = wrong spot, faded = not in the word.</sub></p>
+
 ## What it changes
 
 - **Crossword and Mini:** the full clue lists are hidden so the grid can be big. The current Across and Down clues sit under the grid in large type; tap one to switch. Highlighted squares use greys the e-ink panel shows clearly.
