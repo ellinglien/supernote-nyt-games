@@ -23,6 +23,8 @@ Not made by or affiliated with The New York Times. You need your own NYT Games s
 3. **On your computer** (Mac, Windows or Linux): install [Android Sideloader](https://github.com/ryan-andrew/android_sideloader/releases). Plug the Supernote in with its USB cable, open Android Sideloader, click **Choose APK file**, pick `NYT-Games.apk`, then **Install APK**.
 4. **On the Supernote:** open **NYT Games** from your apps and sign in to your NYT account (menu ☰ → Log in). You stay signed in after that.
 
+   **Normally sign in with Google, Apple or Facebook?** Those buttons won't work in this app. Type your account's email address instead and choose to get a **one-time code by email**, then enter the code from your inbox. It signs you in to the same account.
+
 To update, install the newer `NYT-Games.apk` the same way. Your login and puzzles are kept. (Version 1.1 was called Crossword; 1.2 installs over it.)
 
 ## Tips
