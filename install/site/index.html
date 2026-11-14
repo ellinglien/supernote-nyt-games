@@ -7,25 +7,27 @@
 <title>Install NYT Games on a Supernote</title>
 <meta name="description" content="Install NYT Games, an unofficial e-ink app for NYT puzzles, on a Supernote from Chrome or Edge, over USB.">
 <!-- ell.ing/nyt-games/: one button that installs NYT-Games.apk over USB (install.js, built by ../build.sh from
-     ../src). A copy of superdood.org/install.html: black on white, 1 px ink lines, nothing loaded from elsewhere. -->
+     ../src). A copy of superdood.org/install.html: black on white, 1 px ink lines, nothing loaded from elsewhere. iA Writer Duo (duo-*.woff2, OFL), as superdood.org. -->
 <style>
+@font-face{font-family:"Superdood Duo";src:url(duo-regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Superdood Duo";src:url(duo-bold.woff2) format("woff2");font-weight:700;font-display:swap}
 :root{color-scheme:light}
 *{box-sizing:border-box}
 html{background:#fff;color:#000}
-body{margin:0;background:#fff;color:#000;font:18px/1.4 ui-monospace,Menlo,Consolas,monospace}
+body{margin:0;background:#fff;color:#000;font:18px/1.4 "Superdood Duo",ui-monospace,Menlo,Consolas,monospace}
 main{max-width:30rem;margin:0 auto;padding:32px 16px 40px}
 h1{font-size:24px;margin:0 0 20px;text-align:center}
 ol{margin:0;padding:0 0 0 1.4em;font-size:16px}
 li{margin:0 0 12px}
 section{border-top:1px solid #000;border-bottom:1px solid #000;padding:24px 0;margin:24px 0;text-align:center}
-button{font:700 17px ui-monospace,Menlo,Consolas,monospace;padding:0 24px;border:1px solid #000;border-radius:0;background:#000;color:#fff;min-height:52px;cursor:pointer}
+button{font:700 17px "Superdood Duo",ui-monospace,Menlo,Consolas,monospace;padding:0 24px;border:1px solid #000;border-radius:0;background:#000;color:#fff;min-height:52px;cursor:pointer}
 button:disabled{background:#fff;color:#000;cursor:default}
 button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:3px}
 #note{font-size:15px;margin:16px 0 0;min-height:1.4em}
 .small{font-size:14px}
 a{color:#000}
-.about{border-top:1px solid #000;margin:32px 0 0;padding:32px 0 0;font-size:15px}
-.about h2{font-size:20px;margin:0 0 12px}
+.about{border-top:1px solid #000;max-width:26rem;margin:32px auto 0;padding:32px 0 0;font-size:15px}
+.about h2{font-size:17px;font-weight:700;margin:0 0 12px;text-align:center}
 .about img{display:block;width:100%;height:auto;margin:0 0 16px;filter:grayscale(1);transition:filter .4s}
 .about img:hover{filter:none}
 @media (prefers-reduced-motion:reduce){.about img{transition:none}}
