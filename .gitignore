@@ -4,3 +4,4 @@ build/
 *.keystore
 .DS_Store
 REDDIT-POST.md
+install/src/node_modules/

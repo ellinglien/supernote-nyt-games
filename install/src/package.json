@@ -1,0 +1,12 @@
+{
+  "name": "nyt-games-install-page",
+  "private": true,
+  "description": "ell.ing/nyt-games/: installs NYT Games over USB from Chrome or Edge (WebUSB), with the Tango library (ya-webadb, MIT).",
+  "dependencies": {
+    "@yume-chan/adb": "2.6.4",
+    "@yume-chan/adb-credential-web": "2.1.0",
+    "@yume-chan/adb-daemon-webusb": "2.3.2",
+    "@yume-chan/android-bin": "2.1.0",
+    "esbuild": "0.25.10"
+  }
+}

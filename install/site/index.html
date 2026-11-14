@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Install NYT Games on a Supernote</title>
+<meta name="description" content="Install NYT Games, an unofficial e-ink app for NYT puzzles, on a Supernote from Chrome or Edge, over USB.">
+<!-- ell.ing/nyt-games/: one button that installs NYT-Games.apk over USB (install.js, built by ../build.sh from
+     ../src). A copy of superdood.org/install.html: black on white, 1 px ink lines, nothing loaded from elsewhere. -->
+<style>
+:root{color-scheme:light}
+*{box-sizing:border-box}
+html{background:#fff;color:#000}
+body{margin:0;background:#fff;color:#000;font:18px/1.4 ui-monospace,Menlo,Consolas,monospace}
+main{max-width:30rem;margin:0 auto;padding:32px 16px 40px}
+h1{font-size:24px;margin:0 0 20px;text-align:center}
+ol{margin:0;padding:0 0 0 1.4em;font-size:16px}
+li{margin:0 0 12px}
+section{border-top:1px solid #000;border-bottom:1px solid #000;padding:24px 0;margin:24px 0;text-align:center}
+button{font:700 17px ui-monospace,Menlo,Consolas,monospace;padding:0 24px;border:1px solid #000;border-radius:0;background:#000;color:#fff;min-height:52px;cursor:pointer}
+button:disabled{background:#fff;color:#000;cursor:default}
+button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:3px}
+#note{font-size:15px;margin:16px 0 0;min-height:1.4em}
+.small{font-size:14px}
+a{color:#000}
+</style>
+</head>
+<body>
+<main>
+<h1>Install NYT Games</h1>
+<ol>
+  <li>On the Supernote: Settings → Security &amp; Privacy → turn on <b>Sideloading</b>.</li>
+  <li>Plug the Supernote into this computer with its USB cable.</li>
+  <li>Click <b>Install NYT Games</b>, pick the Supernote in the box that opens, and tap <b>Allow</b> on the Supernote if it asks.</li>
+  <li>On the Supernote: open <b>NYT Games</b> and sign in to your NYT account (menu ☰ → Log in).</li>
+</ol>
+<section>
+  <button id="go">Install NYT Games</button>
+  <p id="note" role="status"></p>
+</section>
+<p class="small">Use a Chrome-based or Edge browser on a desktop computer to install.
+Your login and puzzles are kept when you update.</p>
+<p class="small">You need your own NYT Games subscription for the games that require one.
+This app is unofficial. It isn't made by or connected to The New York Times.</p>
+<p class="small">For other install methods, and the code, see the
+<a href="https://github.com/ellinglien/supernote-nyt-games">README</a>.</p>
+</main>
+<script src="install.js"></script>
+</body>
+</html>

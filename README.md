@@ -31,14 +31,36 @@ Not made by or affiliated with The New York Times. You need your own NYT Games s
 
 ## Install (about 5 minutes, no coding)
 
+The easy way, from Chrome or Edge on a computer:
+
+1. **On the Supernote:** Settings → Security & Privacy → turn on **Sideloading**.
+2. Plug the Supernote into your computer with its USB cable.
+3. Go to **[ell.ing/nyt-games](https://ell.ing/nyt-games/)** and click **Install NYT Games**.
+4. Pick the Supernote in the box that opens, and tap **Allow** on the Supernote if it asks.
+
+### Or with Android Sideloader (Safari, Firefox, or if the page can't reach the Supernote)
+
 1. **Download** `NYT-Games.apk` from the [Releases page](../../releases/latest).
 2. **On the Supernote:** Settings → Security & Privacy → turn on **Sideloading**.
-3. **On your computer** (Mac, Windows or Linux): install [Android Sideloader](https://github.com/ryan-andrew/android_sideloader/releases). Plug the Supernote in with its USB cable, open Android Sideloader, click **Choose APK file**, pick `NYT-Games.apk`, then **Install APK**.
-4. **On the Supernote:** open **NYT Games** from your apps and sign in to your NYT account (menu ☰ → Log in). You stay signed in after that.
+3. **On your computer** (Mac, Windows or Linux): install [Android Sideloader](https://github.com/ryan-andrew/android_sideloader/releases).
+4. Plug the Supernote in with its USB cable and open Android Sideloader.
+5. Click **Choose APK file**, pick `NYT-Games.apk`, then **Install APK**.
 
-   **Normally sign in with Google, Apple or Facebook?** Those buttons won't work in this app. Type your account's email address instead and choose to get a **one-time code by email**, then enter the code from your inbox. It signs you in to the same account.
+### Then sign in
 
-To update, install the newer `NYT-Games.apk` the same way. Your login and puzzles are kept. (Version 1.1 was called Crossword; 1.2 installs over it.)
+On the Supernote, open **NYT Games** from your apps.
+Sign in to your NYT account (menu ☰ → Log in).
+You stay signed in after that.
+
+**Normally sign in with Google, Apple or Facebook?** Those buttons won't work in this app.
+Type your account's email address instead, and choose to get a **one-time code by email**.
+Enter the code from your inbox. It signs you in to the same account.
+
+### Updating
+
+Install the newer version the same way, from the page or with Android Sideloader.
+Your login and puzzles are kept.
+(Version 1.1 was called Crossword; 1.2 installs over it.)
 
 ## Tips
 
@@ -68,6 +90,8 @@ Needs Android Studio (for its SDK and Java) on a Mac; set `ANDROID_HOME` and `JA
 ```bash
 ./build.sh
 ```
+
+`install/` is the install page at ell.ing/nyt-games: `bash install/build.sh` builds it into `install/site/`.
 
 The first build makes a signing key in `~/.android/supernote-nyt.keystore`. An APK signed with your key won't install over one signed by someone else's, so uninstall the other copy first.
 
