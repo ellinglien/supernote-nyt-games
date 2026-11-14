@@ -46,9 +46,14 @@ The easy way, from Chrome or Edge on a computer:
 4. Plug the Supernote in with its USB cable and open Android Sideloader.
 5. Click **Choose APK file**, pick `NYT-Games.apk`, then **Install APK**.
 
-### Then play
+### Updating
 
-On the Supernote, open **NYT Games** from your apps.
+Install the newer version the same way, from the page or with Android Sideloader.
+Your login and puzzles are kept.
+(Version 1.1 was called Crossword; 1.2 installs over it.)
+
+## Signing in
+
 The free games work without signing in.
 
 To play the subscriber games (like the daily Crossword) or keep your streaks, sign in to your NYT account (menu ☰ → Log in).
@@ -57,12 +62,6 @@ You stay signed in after that.
 **Normally sign in with Google, Apple or Facebook?** Those buttons won't work in this app.
 Type your account's email address instead, and choose to get a **one-time code by email**.
 Enter the code from your inbox. It signs you in to the same account.
-
-### Updating
-
-Install the newer version the same way, from the page or with Android Sideloader.
-Your login and puzzles are kept.
-(Version 1.1 was called Crossword; 1.2 installs over it.)
 
 ## Tips
 
