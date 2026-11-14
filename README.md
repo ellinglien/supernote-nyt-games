@@ -2,7 +2,7 @@
 
 An unofficial little Android app that runs the New York Times games on a Supernote e-ink tablet (Manta, Nomad), tuned for a greyscale screen.
 
-It opens the NYT games pages and their hint pages, and nothing else: no news, no other sites, no ads or trackers. You sign in with your own NYT account.
+It opens the NYT games pages and their hint pages, and nothing else: no news, no other sites, no ads or trackers. Free games work as they are; sign in with your own NYT account for the rest.
 
 Not made by or affiliated with The New York Times. You need your own NYT Games subscription for the games that require one.
 
@@ -46,10 +46,12 @@ The easy way, from Chrome or Edge on a computer:
 4. Plug the Supernote in with its USB cable and open Android Sideloader.
 5. Click **Choose APK file**, pick `NYT-Games.apk`, then **Install APK**.
 
-### Then sign in
+### Then play
 
 On the Supernote, open **NYT Games** from your apps.
-Sign in to your NYT account (menu ☰ → Log in).
+The free games work without signing in.
+
+To play the subscriber games (like the daily Crossword) or keep your streaks, sign in to your NYT account (menu ☰ → Log in).
 You stay signed in after that.
 
 **Normally sign in with Google, Apple or Facebook?** Those buttons won't work in this app.
