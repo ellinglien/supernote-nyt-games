@@ -24,6 +24,14 @@ button:focus-visible,a:focus-visible{outline:2px solid #000;outline-offset:3px}
 #note{font-size:15px;margin:16px 0 0;min-height:1.4em}
 .small{font-size:14px}
 a{color:#000}
+.about{border-top:1px solid #000;margin:32px 0 0;padding:32px 0 0;font-size:15px}
+.about h2{font-size:20px;margin:0 0 12px}
+.about img{display:block;width:100%;height:auto;margin:0 0 16px;filter:grayscale(1);transition:filter .4s}
+.about img:hover{filter:none}
+@media (prefers-reduced-motion:reduce){.about img{transition:none}}
+.about p{margin:0 0 12px}
+.about ul{margin:0;padding:0 0 0 1.2em}
+.about li{margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -45,6 +53,23 @@ Your login and puzzles are kept when you update.</p>
 This app is unofficial. It isn't made by or connected to The New York Times.</p>
 <p class="small">For other install methods, and the code, see the
 <a href="https://github.com/ellinglien/supernote-nyt-games">README</a>.</p>
+<section class="about" id="who">
+  <img src="elling.webp" width="832" height="548" alt="Elling Lien laughing, in a black jacket and cap, on a snowy shore">
+  <h2>About Me</h2>
+  <p>Hi! I'm Elling Lien, an artist and arts administrator from Newfoundland and Labrador.</p>
+  <p>I'm Executive Director of the <a href="https://nickelfestival.com/">Nickel Independent Film Festival</a> in
+  St. John's, and of Unpossible NL, which runs the <a href="https://rpmchallenge.com/">RPM Challenge</a> to make a
+  record in February. Thousands of records have been made as part of it since 2006. I'm also proud to be on the board
+  of directors of <a href="https://www.lawnyavawnya.com/">Lawnya Vawnya</a>, a really neat arts and culture festival
+  in St. John's.</p>
+  <p>I'm on Instagram as <a href="https://www.instagram.com/ellinglien/">@ellinglien</a>.</p>
+  <p>Other things I've made and shared on <a href="https://github.com/ellinglien">GitHub</a>:</p>
+  <ul>
+    <li><a href="https://superdood.org/">Superdood</a>: a free scribbler app for the Supernote.</li>
+    <li><a href="https://github.com/ellinglien/sssketch">sssketch</a>: a stem arranger for Endlesss jams.</li>
+    <li><a href="https://github.com/ellinglien/Thermy">Thermy</a>: printing to little Bluetooth thermal printers.</li>
+  </ul>
+</section>
 </main>
 <script src="install.js"></script>
 </body>
