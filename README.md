@@ -30,7 +30,7 @@ Not made by or affiliated with The New York Times. You need your own NYT Games s
 - **Getting around:** a small **Games** button at the top of every game goes back to the main games page.
 - **No ad leftovers:** empty ad boxes, "Continue to…" ad screens and the bottom promo banners (app downloads, gift subscriptions) are removed.
 - **No Crossplay:** it only plays in NYT's phone app, so its links and pictures are hidden.
-- **Faster starts:** NYT's pictures and fonts are kept on the tablet after the first load, as its scripts are.
+- **Faster starts:** a loading screen shows straight away, and the games appear in about 5 seconds instead of 12. NYT's news-site background script, which slowed every start, is turned off, and NYT's pictures and fonts are kept on the tablet after the first load.
 - A link to something outside the games (news, subscriptions) stays put and says **Not in this app**.
 - If Wi-Fi is off, you get a "No connection" page with **Try again** and **Close**. It reloads by itself when Wi-Fi comes back.
 
