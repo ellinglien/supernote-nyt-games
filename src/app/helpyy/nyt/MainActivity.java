@@ -16,6 +16,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +28,8 @@ import java.io.SequenceInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -42,11 +45,23 @@ public class MainActivity extends Activity {
      * The hint pages the games' lightbulb buttons open (Wordle Review, Connections Companion,
      * Spelling Bee forum, Wordplay) are dated articles in the crosswords section, e.g.
      * /2026/10/14/crosswords/wordle-review-1944.html. Only these: other dated pages are news,
-     * and the index pages, columns and bots stay blocked too. back.js adds a way back.
+     * and the index pages and columns stay blocked too. back.js adds a way back.
      */
     static final Pattern HINT_PAGE = Pattern.compile("^/\\d{4}/\\d{2}/\\d{2}/crosswords/");
+    /**
+     * WordleBot and Connections Bot, which "Did you beat the bot?" opens after a game
+     * (/interactive/2022/upshot/wordle-bot.html, /interactive/2024/upshot/connections-bot.html).
+     * They used to be blocked, and the link landed on the main puzzle page (the owner, 2026-11-15).
+     */
+    static final Pattern BOT_PAGE = Pattern.compile("^/interactive/\\d{4}/upshot/[a-z-]+-bot\\.html$");
+    /** Connections: Sports Edition, in NYT's games menu. Its puzzles come from The Athletic's hosts. */
+    static final String SPORTS_EDITION = "/athletic/connections-sports-edition";
+    /** Crossplay only plays in NYT's phone app ("Download app"): its links are hidden (eink.css) and its page blocked. */
+    static final String CROSSPLAY = "/games/crossplay";
     private static final String[] ASSET_HOSTS = {
         "nytimes.com", "nyt.com",
+        // Connections: Sports Edition's puzzles and pictures
+        "theathletic.com",
         // login bot checks
         "captcha-delivery.com", "datadome.co", "hcaptcha.com", "recaptcha.net",
     };
@@ -143,8 +158,16 @@ public class MainActivity extends Activity {
         if ("myaccount.nytimes.com".equals(host)) return true;
         if (!"www.nytimes.com".equals(host) && !"nytimes.com".equals(host)) return false;
         String path = u.getPath() == null ? "" : u.getPath();
+        if (path.startsWith(CROSSPLAY)) return false;
         for (String p : PAGE_PATHS) if (path.startsWith(p)) return true;
-        return HINT_PAGE.matcher(path).find();
+        if (path.startsWith(SPORTS_EDITION)) return true;
+        return HINT_PAGE.matcher(path).find() || BOT_PAGE.matcher(path).matches();
+    }
+
+    /** NYT's home page, where its login sometimes lands. */
+    static boolean isHome(Uri u) {
+        String path = u.getPath();
+        return path == null || path.isEmpty() || "/".equals(path);
     }
 
     static boolean isAsset(Uri u) {
@@ -167,10 +190,40 @@ public class MainActivity extends Activity {
      */
     private static final Pattern NEW_VIEWPORT_UNITS = Pattern.compile("(\\d)[dsl]v([hw])\\b");
 
-    static boolean isPatchable(Uri u) {
+    /**
+     * The games-assets files kept on the tablet, by extension, with their types. Scripts and
+     * styles are patched (dynamic viewport units; eink.css). Pictures and fonts are kept too
+     * (the owner, 2026-11-15: "save any images on first load so it keeps stuff in cache"):
+     * NYT lets the WebView keep its icons for only 5 minutes, so nearly every start fetched
+     * about 45 of them again.
+     */
+    private static final Map<String, String> KEPT_TYPES = new HashMap<>();
+    static {
+        KEPT_TYPES.put("css", "text/css"); KEPT_TYPES.put("js", "application/javascript");
+        KEPT_TYPES.put("svg", "image/svg+xml"); KEPT_TYPES.put("png", "image/png");
+        KEPT_TYPES.put("jpg", "image/jpeg"); KEPT_TYPES.put("jpeg", "image/jpeg");
+        KEPT_TYPES.put("webp", "image/webp"); KEPT_TYPES.put("gif", "image/gif");
+        KEPT_TYPES.put("woff2", "font/woff2"); KEPT_TYPES.put("woff", "font/woff");
+    }
+    /** Pictures and fonts can change under the same name: fetched again after a week. Script and style names carry a content hash, so they never go stale. */
+    private static final long REFRESH_MS = 7L * 24 * 60 * 60 * 1000;
+    /** Kept files are deleted 60 days after they were fetched, so files NYT has stopped using don't pile up. */
+    private static final long PRUNE_MS = 60L * 24 * 60 * 60 * 1000;
+
+    static String extension(String path) {
+        int dot = path.lastIndexOf('.');
+        return dot < 0 || dot < path.lastIndexOf('/') ? "" : path.substring(dot + 1).toLowerCase(java.util.Locale.ROOT);
+    }
+
+    static boolean isKept(Uri u) {
         String path = u.getPath() == null ? "" : u.getPath();
-        return "www.nytimes.com".equals(u.getHost()) && path.startsWith("/games-assets/")
-                && (path.endsWith(".css") || path.endsWith(".js"));
+        return "www.nytimes.com".equals(u.getHost()) && path.startsWith("/games-assets/") && KEPT_TYPES.containsKey(extension(path));
+    }
+
+    /** Crossplay's pictures (its icons and animation), blocked with its links. Its scripts still load, so NYT's pages don't break. */
+    static boolean isCrossplayPicture(Uri u) {
+        String path = u.getPath() == null ? "" : u.getPath().toLowerCase(java.util.Locale.ROOT);
+        return path.contains("crossplay") && !path.endsWith(".js") && !path.endsWith(".css");
     }
 
     private String readRaw(int id) {
@@ -197,6 +250,19 @@ public class MainActivity extends Activity {
             this.cluesJs = cluesJs;
             this.einkCss = einkCss.getBytes(StandardCharsets.UTF_8);
             cache.mkdirs();
+            new Thread(new Runnable() {
+                @Override public void run() { prune(); }
+            }, "prune").start();
+        }
+
+        /** Deletes kept files older than PRUNE_MS, and temporary files left by a download cut short. */
+        private void prune() {
+            File[] files = cache.listFiles();
+            if (files == null) return;
+            long now = System.currentTimeMillis();
+            for (File f : files) {
+                if (f.getName().endsWith(".tmp") ? now - f.lastModified() > 60_000 : now - f.lastModified() > PRUNE_MS) f.delete();
+            }
         }
 
         /** The clue panel (res/raw/clues.js); it guards itself against double injection. */
@@ -224,38 +290,53 @@ public class MainActivity extends Activity {
             if (!cluesJs.isEmpty()) view.evaluateJavascript(cluesJs, null);
         }
 
-        /** games-assets filenames are content-hashed, so a cached copy never goes stale. */
-        private WebResourceResponse patched(Uri u) {
+        /** A kept games-assets file (isKept), from the tablet when it has it; null lets the WebView fetch it itself. */
+        private WebResourceResponse kept(Uri u) {
             String path = u.getPath();
-            String mime = path.endsWith(".css") ? "text/css" : "application/javascript";
+            String ext = extension(path);
+            boolean text = ext.equals("css") || ext.equals("js");
             File f = new File(cache, path.replace('/', '_'));
-            try {
-                if (!f.exists()) {
-                    HttpURLConnection c = (HttpURLConnection) new URL(u.toString()).openConnection();
-                    c.setConnectTimeout(15000);
-                    c.setReadTimeout(30000);
-                    if (c.getResponseCode() != 200) { c.disconnect(); return null; }
-                    String body;
-                    try (InputStream in = c.getInputStream()) {
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        byte[] buf = new byte[65536];
-                        for (int n; (n = in.read(buf)) > 0; ) out.write(buf, 0, n);
-                        body = new String(out.toByteArray(), StandardCharsets.UTF_8);
-                    }
-                    body = NEW_VIEWPORT_UNITS.matcher(body).replaceAll("$1v$2");
-                    File tmp = new File(cache, f.getName() + ".tmp");
-                    try (FileOutputStream w = new FileOutputStream(tmp)) {
-                        w.write(body.getBytes(StandardCharsets.UTF_8));
-                    }
-                    tmp.renameTo(f);
+            if (!f.exists() || (!text && System.currentTimeMillis() - f.lastModified() > REFRESH_MS)) {
+                try {
+                    fetch(u, f, text);
+                } catch (Exception e) {
+                    Log.w(TAG, "fetch failed for " + path + ": " + e);
+                    if (!f.exists()) return null; // an older copy is better than none
                 }
-                InputStream in = new FileInputStream(f);
-                if (path.endsWith(".css")) in = new SequenceInputStream(in, new ByteArrayInputStream(einkCss));
-                return new WebResourceResponse(mime, "utf-8", in);
-            } catch (Exception e) {
-                Log.w(TAG, "patch failed for " + path + ": " + e);
-                return null; // let the WebView fetch it unpatched
             }
+            try {
+                InputStream in = new FileInputStream(f);
+                if (ext.equals("css")) in = new SequenceInputStream(in, new ByteArrayInputStream(einkCss));
+                return new WebResourceResponse(KEPT_TYPES.get(ext), text ? "utf-8" : null, in);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        /** Downloads u into f, the dynamic viewport units rewritten in scripts and styles. */
+        private void fetch(Uri u, File f, boolean text) throws Exception {
+            HttpURLConnection c = (HttpURLConnection) new URL(u.toString()).openConnection();
+            c.setConnectTimeout(15000);
+            c.setReadTimeout(30000);
+            byte[] body;
+            try {
+                if (c.getResponseCode() != 200) throw new java.io.IOException("HTTP " + c.getResponseCode());
+                try (InputStream in = c.getInputStream()) {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    byte[] buf = new byte[65536];
+                    for (int n; (n = in.read(buf)) > 0; ) out.write(buf, 0, n);
+                    body = out.toByteArray();
+                }
+            } finally {
+                c.disconnect();
+            }
+            if (text) body = NEW_VIEWPORT_UNITS.matcher(new String(body, StandardCharsets.UTF_8)).replaceAll("$1v$2").getBytes(StandardCharsets.UTF_8);
+            // Requests run on several threads: each writes its own temporary file.
+            File tmp = new File(cache, f.getName() + "." + Thread.currentThread().getId() + ".tmp");
+            try (FileOutputStream w = new FileOutputStream(tmp)) {
+                w.write(body);
+            }
+            if (!tmp.renameTo(f)) { tmp.delete(); throw new java.io.IOException("rename"); }
         }
 
         @Override
@@ -266,15 +347,23 @@ public class MainActivity extends Activity {
             Log.i(TAG, "blocked page " + u.getHost() + u.getPath());
             // NYT often bounces to its home page after login; land on the
             // puzzles instead of leaving a spinner that never resolves.
-            if (hostIs(u.getHost(), "nytimes.com") && req.isForMainFrame()) {
+            // Any other link stays where it is, with a note. Sending every
+            // blocked link to the puzzles made WordleBot's link look broken
+            // (the owner, 2026-11-15).
+            if (hostIs(u.getHost(), "nytimes.com") && req.isForMainFrame() && (req.isRedirect() || isHome(u))) {
                 view.loadUrl(view.getContext().getString(R.string.start_url));
+            } else if (req.isForMainFrame() && req.hasGesture()) {
+                Toast.makeText(MainActivity.this, "Not in this app", Toast.LENGTH_SHORT).show();
             }
             return true;
         }
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
-            if (isPatchable(req.getUrl())) return patched(req.getUrl());
+            if (isCrossplayPicture(req.getUrl())) {
+                return new WebResourceResponse("text/plain", "utf-8", 204, "Blocked", null, new ByteArrayInputStream(new byte[0]));
+            }
+            if (isKept(req.getUrl())) return kept(req.getUrl());
             if (isAsset(req.getUrl())) return null;
             Log.i(TAG, "blocked asset " + req.getUrl().getHost() + req.getUrl().getPath());
             return new WebResourceResponse("text/plain", "utf-8", 204, "Blocked",

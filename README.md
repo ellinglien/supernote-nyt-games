@@ -25,8 +25,13 @@ Not made by or affiliated with The New York Times. You need your own NYT Games s
 - **Letter Boxed:** a darker background so the white letters stand out.
 - Text is never shrunk below 100% (Supernote's system font setting otherwise shrinks every web page).
 - **Hints:** each game's hint button (the lightbulb) opens its hint page, with a big **← Back to the game** bar at the bottom.
+- **The bots:** "Did you beat the bot?" opens WordleBot or Connections Bot, with the same **← Back to the game** bar.
+- **Connections: Sports Edition** opens from NYT's games menu.
 - **Getting around:** a small **Games** button at the top of every game goes back to the main games page.
 - **No ad leftovers:** empty ad boxes, "Continue to…" ad screens and the bottom promo banners (app downloads, gift subscriptions) are removed.
+- **No Crossplay:** it only plays in NYT's phone app, so its links and pictures are hidden.
+- **Faster starts:** NYT's pictures and fonts are kept on the tablet after the first load, as its scripts are.
+- A link to something outside the games (news, subscriptions) stays put and says **Not in this app**.
 - If Wi-Fi is off, you get a "No connection" page with **Try again** and **Close**. It reloads by itself when Wi-Fi comes back.
 
 ## Install (about 5 minutes, no coding)

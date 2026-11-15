@@ -1,10 +1,12 @@
 /* Injected by the NYT Games app on every page. Adds a big bar at the bottom with a way back
    (the Supernote has no Back button of its own) on:
    - hint pages (dated articles in the crosswords section, the only articles the app opens);
+   - WordleBot and Connections Bot ("Did you beat the bot?");
    - Tiles, which depends on colour, with a note that it isn't recommended on e-ink.
    Idempotent. */
 (function () {
-  var hint = /^\/\d{4}\/\d{2}\/\d{2}\/crosswords\//.test(location.pathname);
+  var hint = /^\/\d{4}\/\d{2}\/\d{2}\/crosswords\//.test(location.pathname)
+    || /^\/interactive\/\d{4}\/upshot\/[a-z-]+-bot\.html$/.test(location.pathname);
   var tiles = /^\/puzzles\/tiles/.test(location.pathname);
   if (!hint && !tiles) return;
   if (document.getElementById('eink-back')) return;
@@ -38,7 +40,7 @@
 /* On every game page, a small "Games" button beside the game's own menu button, back to the
    main games page. Pinned, so it never moves a game's layout. */
 (function () {
-  if (!/^\/(games|puzzles|crosswords\/game)\//.test(location.pathname)) return;
+  if (!/^\/(games|puzzles|crosswords\/game|athletic\/connections-sports-edition)\//.test(location.pathname)) return;
   if (document.getElementById('eink-home')) return;
   if (!document.body) { document.addEventListener('DOMContentLoaded', arguments.callee); return; }
   var home = document.createElement('a');

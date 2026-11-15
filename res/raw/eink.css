@@ -13,6 +13,10 @@
 [class*=Banner-module_singleIconBanner],[class*=Banner-module_sbBanner],[class*=Banner-module_strandsBanner],
 a[href*="onelink.me"],#cache-safe-games-sale-banner-a,
 .games-sale-banner-mini,.games-sale-banner-daily{display:none!important}
+/* Crossplay only plays in NYT's phone app, so it can't be played here: its menu item, game card,
+   banners, next-game card and footer link are hidden (the owner, 2026-11-15). Every one carries
+   "crossplay" in a class name or its link. */
+[class*=crossplay i],a[href*="/games/crossplay"]{display:none!important}
 
 /* ---- Crossword and Mini ----
    NYT marks the selected square yellow and the current word light blue, both of which render
