@@ -15,7 +15,19 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.ServiceWorkerClient;
+import android.webkit.ServiceWorkerController;
 import android.webkit.WebViewClient;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -104,8 +116,20 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         WebView.setWebContentsDebuggingEnabled(true); // inspect over USB from the Mac
+        // NYT's news-site service worker (/vi-assets/static-assets/sw.js) ran before every page
+        // load; starting it on the Manta took about 8 s (2026-11-15). The games don't need it:
+        // nothing a service worker asks for is fetched, so none installs, and LockedClient
+        // removes the one already installed.
+        ServiceWorkerController.getInstance().setServiceWorkerClient(new ServiceWorkerClient() {
+            @Override public WebResourceResponse shouldInterceptRequest(WebResourceRequest req) { return blocked(); }
+        });
         web = new WebView(this);
-        setContentView(web);
+        // A loading screen until NYT's page first draws (the owner, 2026-11-15: "loading screen
+        // takes about a minute before anything appears. can we include a loading screen").
+        FrameLayout root = new FrameLayout(this);
+        root.addView(web, new FrameLayout.LayoutParams(-1, -1));
+        root.addView(splash(), new FrameLayout.LayoutParams(-1, -1));
+        setContentView(root);
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -140,6 +164,46 @@ public class MainActivity extends Activity {
             Log.w(TAG, "no network callback: " + e);
         }
     }
+
+    /** The app's crossword-grid icon, "NYT Games" and "Loading…" on white, centred. */
+    private View splash() {
+        float dp = getResources().getDisplayMetrics().density;
+        LinearLayout box = new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+        box.setGravity(Gravity.CENTER);
+        box.setBackgroundColor(Color.WHITE);
+        box.setClickable(true); // nothing under it is tapped while it shows
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(R.mipmap.ic_launcher);
+        box.addView(icon, new LinearLayout.LayoutParams((int) (200 * dp), (int) (200 * dp)));
+        TextView name = new TextView(this);
+        name.setText("NYT Games");
+        name.setTextColor(Color.BLACK);
+        name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 40);
+        name.setTypeface(Typeface.DEFAULT_BOLD);
+        name.setGravity(Gravity.CENTER);
+        name.setPadding(0, (int) (32 * dp), 0, (int) (12 * dp));
+        box.addView(name);
+        TextView loading = new TextView(this);
+        loading.setText("Loading…");
+        loading.setTextColor(Color.DKGRAY);
+        loading.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 26);
+        loading.setGravity(Gravity.CENTER);
+        box.addView(loading);
+        splash = box;
+        return box;
+    }
+
+    /** The loading screen, until the first page draws; then null. */
+    private View splash;
+
+    static WebResourceResponse blocked() {
+        return new WebResourceResponse("text/plain", "utf-8", 204, "Blocked", null, new ByteArrayInputStream(new byte[0]));
+    }
+
+    /** Removes service workers already installed (NYT's news-site one); see onCreate. */
+    private static final String NO_SERVICE_WORKERS = "navigator.serviceWorker && navigator.serviceWorker.getRegistrations()"
+        + ".then(function (rs) { rs.forEach(function (r) { r.unregister(); }); });";
 
     /** Coming back to the app is the other moment the network has usually returned. */
     @Override
@@ -288,6 +352,15 @@ public class MainActivity extends Activity {
                 view.clearHistory(); // so Back doesn't land on the offline page
             }
             if (!cluesJs.isEmpty()) view.evaluateJavascript(cluesJs, null);
+            if (url != null && url.startsWith("https://")) view.evaluateJavascript(NO_SERVICE_WORKERS, null);
+        }
+
+        /** The first page has drawn (or the offline page): the loading screen goes. */
+        @Override
+        public void onPageCommitVisible(WebView view, String url) {
+            if (splash == null) return;
+            ((ViewGroup) splash.getParent()).removeView(splash);
+            splash = null;
         }
 
         /** A kept games-assets file (isKept), from the tablet when it has it; null lets the WebView fetch it itself. */
@@ -361,13 +434,12 @@ public class MainActivity extends Activity {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest req) {
             if (isCrossplayPicture(req.getUrl())) {
-                return new WebResourceResponse("text/plain", "utf-8", 204, "Blocked", null, new ByteArrayInputStream(new byte[0]));
+                return blocked();
             }
             if (isKept(req.getUrl())) return kept(req.getUrl());
             if (isAsset(req.getUrl())) return null;
             Log.i(TAG, "blocked asset " + req.getUrl().getHost() + req.getUrl().getPath());
-            return new WebResourceResponse("text/plain", "utf-8", 204, "Blocked",
-                    null, new ByteArrayInputStream(new byte[0]));
+            return blocked();
         }
     }
 
